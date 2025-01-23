@@ -6,6 +6,13 @@
 
 Raspberry Pi OS configs, scripts, apps and bots
 
+## Install
+
+Install with command
+```bash
+eval "$(wget -qO- https://raw.githubusercontent.com/sangar/venus/master/boot.sh)"
+```
+
 ### Acknowledgement
 
 Venus was inspired by [Omakub](https://github.com/basecamp/omakub)
