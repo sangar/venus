@@ -10,7 +10,7 @@ ascii_art='____   ____
 
 echo -e "$ascii_art"
 echo "=> Venus is for Raspberry Pi OS!"
-echo -e "\nBegin installation (or abort with ctrl+c)..."
+echo -e "\nBegining installation..."
 
 sudo apt-get update >/dev/null
 sudo apt-get install -y git >/dev/null
