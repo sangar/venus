@@ -1,4 +1,6 @@
-![Venus](https://raw.githubusercontent.com/sangar/venus/.github/logo.png)
+![Venus](https://github.com/sangar/venus/blob/731c9e0ea6fedfaa766cfe051990afd94f9c07b1/.github/logo.png)
+
+
 
 # Venus
 
