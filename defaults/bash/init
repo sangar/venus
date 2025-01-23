@@ -1,0 +1,4 @@
+# init rbenv
+if command -v ~/.rbenv/bin/rbenv &> /dev/null; then
+  eval "$(~/.rbenv/bin/rbenv init - --no-rehash bash)"
+fi

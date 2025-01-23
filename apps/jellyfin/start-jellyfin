@@ -1,0 +1,9 @@
+docker run -d \
+  --name jellyfin \
+  --user 1000:1000 \
+  --net=host \
+  --volume /mnt/USBStorage/.cache/jellyfin:/config \
+  --volume /mnt/USBStorage/.cache/jellyfin:/cache \
+  --mount type=bind,source=/mnt/USBStorage/video,target=/video \
+  --restart=unless-stopped \
+  jellyfin/jellyfin

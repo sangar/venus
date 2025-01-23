@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hvor er rømlingen!</title>
+
+  <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@latest/dist/maplibre-gl.css" />
+  <script src="https://unpkg.com/maplibre-gl@latest/dist/maplibre-gl.js"></script>
+
+  <style>
+    body {
+      margin: 0;
+    }
+
+    #map {
+      width: 100vw;
+      height: 100vh;
+    }
+  </style>
+</head>
+<body>
+  <div id="map"></div>
+
+  <script type="text/javascript">
+    const timeline = [
+      {
+        lng: 7.140144514805144,
+        lat: 62.96746104211309,
+        title: "Rømte",
+        date: new Date("December 25, 2024 06:15:00")
+      },
+      {
+        lng: 7.120011699748488,
+        lat: 62.96229877893725,
+        title: "Observasjon",
+        date: new Date("December 25, 2024 06:54:00")
+      },
+      {
+        lng: 6.955096176351134,
+        lat: 62.90184101796112,
+        title: "Mulig fluktsted",
+        date: new Date("December 25, 2024 10:00:00")
+      },
+      {
+        lng: 6.953793795164103,
+        lat: 62.90168119010815,
+        title: "Stjålet grandiosa",
+        date: new Date("December 27, 2024 13:00:00")
+      },
+      {
+        lng: 6.954857448590815,
+        lat: 62.901819778815394,
+        title: "Ble oppdaget",
+        date: new Date("December 28, 2024 13:00:00")
+      },
+      {
+        lng: 6.964412283284332,
+        lat: 62.90711390238755,
+        title: "Ble oppdaget",
+        date: new Date("January 02, 2025 13:00:00")
+      },
+      {
+        lng: 6.965317818324735,
+        lat: 62.90729948769098,
+        title: "Sekk funnet",
+        date: new Date("January 02, 2025 13:05:00")
+      },
+      {
+        lng: 6.971131169582264,
+        lat: 62.90813356899048,
+        title: "Spor etter flukt",
+        date: new Date("January 02, 2025 13:45:00")
+      },
+      {
+        lng: 6.956052096275016,
+        lat: 62.90112096903658,
+        title: "Noen har rotet på loftet og stekovnen stod på",
+        date: new Date("January 04, 2025 20:45:00")
+      },
+      {
+        lng: 7.095005455398535,
+        lat: 62.9544885035354,
+        title: "Flyktet hit og ble pågrepet",
+        date: new Date("January 05, 2025 08:00:00")
+      }
+    ]
+
+    const pois = [
+      {
+        lng: 6.958522866120546,
+        lat: 62.903902774121065,
+        title: "Tomt hus"
+      },
+      {
+        lng: 6.950108453052138,
+        lat: 62.903890630265494,
+        title: "Tomt hus"
+      },
+      {
+        lng: 6.956968100652972,
+        lat: 62.903949402245985,
+        title: "Aktivt fjøs"
+      },
+      {
+        lng: 6.955201859483736,
+        lat: 62.904454243319464,
+        title: "Aktivt fjøs"
+      },
+      {
+        lng: 6.959768454700708,
+        lat: 62.9049296370375,
+        title: "Aktivt fjøs"
+      },
+      {
+        lng: 6.971104301276313,
+        lat: 62.908124499889055,
+        title: "Forlatt uthus"
+      },
+      {
+        lng: 6.947327214145446,
+        lat: 62.90315965459362,
+        title: "Hus/hytte uten aktivitet"
+      },
+      {
+        lng: 6.961648455220683,
+        lat: 62.90530431610583,
+        title: "Inaktivt fjøs"
+      }
+    ]
+
+    const observations = [
+      {
+        lng: 6.914111444932047,
+        lat: 62.907193312018705,
+        title: "Observasjon meldt inn",
+        date: new Date("December 29, 2024 13:00:00")
+      },
+      {
+        lng: 7.0653010244596715,
+        lat: 62.932016152194535,
+        title: "Mystiske spor meldt inn",
+        date: new Date("January 02, 2025 13:00:00")
+      },
+      {
+        lng: 6.932165801911168,
+        lat: 62.90530847459263,
+        title: "Mystisk person observert",
+        date: new Date("January 02, 2025 18:00:00")
+      },
+      {
+        lng: 6.939743165589476,
+        lat: 62.91105119521566,
+        title: "Spor utenfor kjente stier",
+        date: new Date("January 03, 2025 18:00:00")
+      },
+      {
+        lng: 6.950108076950158,
+        lat: 62.89053569303633,
+        title: "Noen sjekker om dører er åpne",
+        date: new Date("January 03, 2025 04:00:00")
+      }
+    ]
+
+    const style = {
+      "version": 8,
+      "sources": {
+        "osm": {
+          "type": "raster",
+          "tiles": ["https://a.tile.openstreetmap.org/{z}/{x}/{y}.png"],
+          "tileSize": 256,
+          "attribution": "&copy; OpenStreetMap Contributors",
+          "maxzoom": 19
+        }
+      },
+      "layers": [
+        {
+          "id": "osm",
+          "type": "raster",
+          "source": "osm" // This must match the source key above
+        }
+      ]
+    }
+
+    const last = timeline.slice(-1)[0]
+
+    // Initialise the map
+    const map = new maplibregl.Map({
+      container: 'map',
+      style: style,
+      center: [last.lng, last.lat],
+      zoom: 13
+    });
+
+    map.on("click", (e) => {
+      //console.log("e", e)
+      console.log("e.lngLat", e.lngLat)
+    })
+
+    // POIs
+    for (var i = 0; i < pois.length; i++) {
+      const data = pois[i]
+
+      const popup = new maplibregl.Popup({offset: 25})
+      popup.setText(`
+        ${data.title}
+      `);
+
+      const marker = new maplibregl.Marker({ "color": "green" })
+        .setLngLat([data.lng, data.lat])
+        .setPopup(popup)
+        .addTo(map)
+    }
+
+    // Observations
+    for (var i = 0; i < observations.length; i++) {
+      const data = observations[i]
+
+      const popup = new maplibregl.Popup({offset: 25}).setText(`
+        ${data.title}
+        ${data.date.toLocaleDateString("nb-NO")}
+      `);
+
+      const marker = new maplibregl.Marker({ "color": "orange" })
+        .setLngLat([data.lng, data.lat])
+        .setPopup(popup)
+        .addTo(map)
+    }
+
+    // Timeline
+    map.on('load', () => {
+      map.addSource("lines", {
+        "type": "geojson",
+        "data": {
+          "type": "FeatureCollection",
+          "features": [
+            {
+              "type": "Feature",
+              "properties": {
+                "color": "#33C9EB"
+              },
+              "geometry": {
+                "type": "LineString",
+                "coordinates": timeline.map((elem) => [elem.lng, elem.lat])
+              }
+            }
+          ]
+        }
+      })
+      map.addLayer({
+        "id": "lines",
+        "type": "line",
+        "source": "lines",
+        "paint": {
+          "line-width": 3,
+          // Use a get expression (https://maplibre.org/maplibre-style-spec/expressions/#get)
+          // to set the line-color to a feature property value.
+          "line-color": ["get", "color"]
+        }
+      })
+    })
+
+    for (var i = 0; i < timeline.length; i++) {
+      const data = timeline[i]
+
+      const popup = new maplibregl.Popup({offset: 25})
+
+      popup.setHTML(`
+        <h4>${i+1}: ${data.title}</h4>
+        <p>${data.date.toLocaleString("nb-NO")}</p>
+      `);
+
+      const marker = new maplibregl.Marker({ "color": "red" })
+        .setLngLat([data.lng, data.lat])
+        .setPopup(popup)
+        .addTo(map)
+    }
+
+    // Add the navigation control
+    map.addControl(new maplibregl.NavigationControl());
+  </script>
+</body>
+</html>

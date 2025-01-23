@@ -1,0 +1,13 @@
+services:
+  jellyfin:
+    container_name: jellyfin
+    user: 1000:1000
+    network_mode: host
+    volumes:
+      - /mnt/USBStorage/.cache/jellyfin:/config
+      - /mnt/USBStorage/.cache/jellyfin:/cache
+      - type: bind
+        source: /mnt/USBStorage/video
+        target: /video
+    restart: unless-stopped
+    image: jellyfin/jellyfin
