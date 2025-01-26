@@ -4,3 +4,11 @@ source $VENUS_PATH/ascii.sh
 #echo "" # Add spacing
 #echo "                                 $(cat $VENUS_PATH/version)"
 #echo "" # Add spacing
+
+
+# update
+if  [[ $1 = "update" ]]; then
+  cd $VENUS_PATH
+  git pull
+  cd -
+fi
