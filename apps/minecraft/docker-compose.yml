@@ -1,0 +1,35 @@
+services:
+  minecraft:
+    image: itzg/minecraft-server
+    ports:
+      - 25565:25565
+    environment:
+      MOTD: "Welcome to Minecraft..."
+      EULA: "TRUE"
+      ENABLE_WHITELIST: "true"
+      ENABLE_RCON: "true"
+      RCON_PASSWORD: ${RCON_PASSWORD}
+      RCON_PORT: 28016
+      restart: always
+    volumes:
+    - ./data:/data
+  backup:
+    image: itzg/mc-backup
+    # This needs to be set because backups use hostnames
+    hostname: minecraftbackup
+    environment:
+      BACKUP_METHOD: restic
+      BACKUP_INTERVAL: "3h"
+      INITIAL_DELAY: 5
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+      AWS_DEFAULT_REGION: ${AWS_REGION}
+      RESTIC_REPOSITORY: ${RESTIC_REPOSITORY}
+      RESTIC_FORGET_ARGS: ${RESTIC_FORGET_ARGS}
+      RESTIC_PASSWORD: ${RESTIC_PASSWORD}
+      RCON_PASSWORD: ${RCON_PASSWORD}
+      RCON_PORT: 28016
+      RCON_HOST: minecraft
+    volumes:
+      - ./data:/data:ro
+      - ./recover:/recover
