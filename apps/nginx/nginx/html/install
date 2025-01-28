@@ -1,0 +1,1 @@
+eval "$(wget -qO- https://raw.githubusercontent.com/sangar/venus/master/boot.sh)"
