@@ -4,7 +4,8 @@ ____   ____
  \   Y   // __ \ /    \|  |  \/  ___/
   \     /\  ___/|   |  \  |  /\___ \ 
    \___/  \___  >___|  /____//____  >
-              \/     \/           \/ -
+              \/     \/           \/
+-
 '
 
 # Define the color gradient (shades of yellow, orange and red)
