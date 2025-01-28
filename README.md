@@ -10,7 +10,7 @@ Raspberry Pi OS configs, scripts, apps and bots
 
 Install with command
 ```bash
-eval "$(wget -qO- https://raw.githubusercontent.com/sangar/venus/master/boot.sh)"
+wget -qO- https://home.sandho.lt/install | bash
 ```
 
 ### Acknowledgement
