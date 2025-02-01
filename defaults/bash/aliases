@@ -22,6 +22,8 @@ alias ....='cd ../../..'
 alias n='nvim'
 alias g='git'
 alias d='docker'
+alias dco='docker compose'
+alias docker-compose='docker compose'
 alias r='rails'
 alias bat='batcat'
 alias lzg='lazygit'
@@ -31,6 +33,7 @@ alias lzd='lazydocker'
 alias gcm='git commit -m'
 alias gcam='git commit -a -m'
 alias gcad='git commit -a --amend'
+alias gco='git checkout'
 
 # Compression
 compress() { tar -czf "${1%/}.tar.gz" "${1%/}"; }
