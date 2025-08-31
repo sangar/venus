@@ -10,7 +10,7 @@ services:
       ENABLE_RCON: "true"
       RCON_PASSWORD: ${RCON_PASSWORD}
       RCON_PORT: 28016
-      restart: always
+    restart: always
     volumes:
     - ./data:/data
   backup:
