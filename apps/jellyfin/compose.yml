@@ -1,0 +1,80 @@
+services:
+  jellyfin:
+    container_name: jellyfin
+    user: 1000:1000
+    network_mode: host
+    volumes:
+      - /data/.cache/jellyfin:/config
+      - /data/.cache/jellyfin:/cache
+      - type: bind
+        source: /data/video
+        target: /video
+    restart: unless-stopped
+    image: jellyfin/jellyfin
+    # devices:  # ← uncomment for Intel/AMD/NVIDIA HW transcoding
+    #   - /dev/dri:/dev/dri
+
+  prowlarr:
+    image: lscr.io/linuxserver/prowlarr:latest
+    container_name: prowlarr
+    volumes:
+      - /data/.config/prowlarr:/config
+    ports:
+      - "9696:9696"
+    restart: unless-stopped
+
+  sonarr:
+    image: lscr.io/linuxserver/sonarr:latest
+    container_name: sonarr
+    volumes:
+      - /data/.config/sonarr:/config
+      - /data:/data               # important: same /data as below
+    ports:
+      - "8989:8989"
+    restart: unless-stopped
+
+  radarr:
+    image: lscr.io/linuxserver/radarr:latest
+    container_name: radarr
+    volumes:
+      - /data/.config/radarr:/config
+      - /data:/data
+    ports:
+      - "7878:7878"
+    restart: unless-stopped
+
+  qbittorrent:
+    image: lscr.io/linuxserver/qbittorrent:latest
+    container_name: qbittorrent
+    volumes:
+      - /data/.config/qbittorrent:/config
+      - /data/torrents:/data/torrents
+    ports:
+      - "8080:8080"               # web UI
+      - "6881:6881"
+      - "6881:6881/udp"
+    environment:
+      - WEBUI_PORT=8080
+    restart: unless-stopped
+
+  jellyseerr:
+    image: fallenbagel/jellyseerr:latest
+    container_name: jellyseerr
+    volumes:
+      - /data/.config/jellyseerr:/app/config
+    ports:
+      - "5055:5055"
+    restart: unless-stopped
+    depends_on:
+      - jellyfin
+
+  bazarr:
+    image: lscr.io/linuxserver/bazarr:latest
+    container_name: bazarr
+    volumes:
+      - /data/.local/bazarr:/config
+      - /data/media:/movies
+      - /data/media:/tv
+    ports:
+      - "6767:6767"
+    restart: unless-stopped
