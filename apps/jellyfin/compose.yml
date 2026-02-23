@@ -72,7 +72,7 @@ services:
     image: lscr.io/linuxserver/bazarr:latest
     container_name: bazarr
     volumes:
-      - /data/.local/bazarr:/config
+      - /data/.config/bazarr:/config
       - /data/media:/movies
       - /data/media:/tv
     ports:
