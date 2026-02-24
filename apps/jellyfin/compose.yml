@@ -7,6 +7,9 @@ services:
       - /data/.cache/jellyfin:/config
       - /data/.cache/jellyfin:/cache
       - type: bind
+        source: /data
+        target: /data
+      - type: bind
         source: /data/video
         target: /video
     restart: unless-stopped
