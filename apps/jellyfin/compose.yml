@@ -4,7 +4,7 @@ services:
     user: 1000:1000
     network_mode: host
     volumes:
-      - /data/.cache/jellyfin:/config
+      - /data/.config/jellyfin:/config
       - /data/.cache/jellyfin:/cache
       - type: bind
         source: /data
