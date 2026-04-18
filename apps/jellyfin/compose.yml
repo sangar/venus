@@ -1,22 +1,26 @@
 services:
   traefik:
-    image: traefik
+    image: traefik:latest
     container_name: traefik
     command:
       - "--api.insecure=true"
       - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
       - "--entrypoints.web.address=:80"
     ports:
       - "80:80"
       - "8081:8080"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
+    networks:
+      - jellyfin-net
     restart: unless-stopped
 
   jellyfin:
     container_name: jellyfin
     user: 1000:1000
-    network_mode: host
+    networks:
+      - jellyfin-net
     volumes:
       - /data/.config/jellyfin:/config
       - /data/.cache/jellyfin:/cache
@@ -30,74 +34,128 @@ services:
     image: jellyfin/jellyfin
     # devices:  # ← uncomment for Intel/AMD/NVIDIA HW transcoding
     #   - /dev/dri:/dev/dri
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.jellyfin.rule=Host(`venus.local`) && PathPrefix(`/jellyfin`)"
+      - "traefik.http.routers.jellyfin.entrypoints=web"
+      - "traefik.http.middlewares.jellyfin-stripprefix.stripprefix.prefixes=/jellyfin"
+      - "traefik.http.routers.jellyfin.middlewares=jellyfin-stripprefix"
+      - "traefik.http.services.jellyfin.loadbalancer.server.port=8096"
 
   prowlarr:
     image: lscr.io/linuxserver/prowlarr:latest
     container_name: prowlarr
     user: 1000:1000
+    networks:
+      - jellyfin-net
     volumes:
       - /data/.config/prowlarr:/config
-    ports:
-      - "9696:9696"
     restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.prowlarr.rule=Host(`venus.local`) && PathPrefix(`/prowlarr`)"
+      - "traefik.http.routers.prowlarr.entrypoints=web"
+      - "traefik.http.middlewares.prowlarr-stripprefix.stripprefix.prefixes=/prowlarr"
+      - "traefik.http.routers.prowlarr.middlewares=prowlarr-stripprefix"
+      - "traefik.http.services.prowlarr.loadbalancer.server.port=9696"
 
   sonarr:
     image: lscr.io/linuxserver/sonarr:latest
     container_name: sonarr
     user: 1000:1000
+    networks:
+      - jellyfin-net
     volumes:
       - /data/.config/sonarr:/config
-      - /data:/data               # important: same /data as below
-    ports:
-      - "8989:8989"
+      - /data:/data
     restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.sonarr.rule=Host(`venus.local`) && PathPrefix(`/sonarr`)"
+      - "traefik.http.routers.sonarr.entrypoints=web"
+      - "traefik.http.middlewares.sonarr-stripprefix.stripprefix.prefixes=/sonarr"
+      - "traefik.http.routers.sonarr.middlewares=sonarr-stripprefix"
+      - "traefik.http.services.sonarr.loadbalancer.server.port=8989"
 
   radarr:
     image: lscr.io/linuxserver/radarr:latest
     container_name: radarr
     user: 1000:1000
+    networks:
+      - jellyfin-net
     volumes:
       - /data/.config/radarr:/config
       - /data:/data
-    ports:
-      - "7878:7878"
     restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.radarr.rule=Host(`venus.local`) && PathPrefix(`/radarr`)"
+      - "traefik.http.routers.radarr.entrypoints=web"
+      - "traefik.http.middlewares.radarr-stripprefix.stripprefix.prefixes=/radarr"
+      - "traefik.http.routers.radarr.middlewares=radarr-stripprefix"
+      - "traefik.http.services.radarr.loadbalancer.server.port=7878"
 
   qbittorrent:
     image: lscr.io/linuxserver/qbittorrent:latest
     container_name: qbittorrent
     user: 1000:1000
+    networks:
+      - jellyfin-net
     volumes:
       - /data/.config/qbittorrent:/config
       - /data/torrents:/data/torrents
     ports:
-      - "8080:8080"               # web UI
       - "6881:6881"
       - "6881:6881/udp"
     environment:
       - WEBUI_PORT=8080
     restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.qbittorrent.rule=Host(`venus.local`) && PathPrefix(`/qbittorrent`)"
+      - "traefik.http.routers.qbittorrent.entrypoints=web"
+      - "traefik.http.middlewares.qbittorrent-stripprefix.stripprefix.prefixes=/qbittorrent"
+      - "traefik.http.routers.qbittorrent.middlewares=qbittorrent-stripprefix"
+      - "traefik.http.services.qbittorrent.loadbalancer.server.port=8080"
 
   jellyseerr:
     image: fallenbagel/jellyseerr:latest
     container_name: jellyseerr
     user: 1000:1000
+    networks:
+      - jellyfin-net
     volumes:
       - /data/.config/jellyseerr:/app/config
-    ports:
-      - "5055:5055"
     restart: unless-stopped
     depends_on:
       - jellyfin
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.jellyseerr.rule=Host(`venus.local`) && PathPrefix(`/jellyseerr`)"
+      - "traefik.http.routers.jellyseerr.entrypoints=web"
+      - "traefik.http.middlewares.jellyseerr-stripprefix.stripprefix.prefixes=/jellyseerr"
+      - "traefik.http.routers.jellyseerr.middlewares=jellyseerr-stripprefix"
+      - "traefik.http.services.jellyseerr.loadbalancer.server.port=5055"
 
   bazarr:
     image: lscr.io/linuxserver/bazarr:latest
     container_name: bazarr
     user: 1000:1000
+    networks:
+      - jellyfin-net
     volumes:
       - /data/.config/bazarr:/config
       - /data/media:/movies
       - /data/media:/tv
-    ports:
-      - "6767:6767"
     restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.bazarr.rule=Host(`venus.local`) && PathPrefix(`/bazarr`)"
+      - "traefik.http.routers.bazarr.entrypoints=web"
+      - "traefik.http.middlewares.bazarr-stripprefix.stripprefix.prefixes=/bazarr"
+      - "traefik.http.routers.bazarr.middlewares=bazarr-stripprefix"
+      - "traefik.http.services.bazarr.loadbalancer.server.port=6767"
+
+networks:
+  jellyfin-net:
+    driver: bridge
