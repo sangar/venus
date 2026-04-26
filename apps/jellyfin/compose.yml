@@ -2,8 +2,6 @@ services:
   jellyfin:
     container_name: jellyfin
     user: 1000:1000
-    networks:
-      - jellyfin-net
     volumes:
       - /data/.config/jellyfin:/config
       - /data/.cache/jellyfin:/cache
@@ -24,8 +22,6 @@ services:
     image: lscr.io/linuxserver/prowlarr:latest
     container_name: prowlarr
     user: 1000:1000
-    networks:
-      - jellyfin-net
     volumes:
       - /data/.config/prowlarr:/config
     ports:
@@ -36,8 +32,6 @@ services:
     image: lscr.io/linuxserver/sonarr:latest
     container_name: sonarr
     user: 1000:1000
-    networks:
-      - jellyfin-net
     volumes:
       - /data/.config/sonarr:/config
       - /data:/data
@@ -49,8 +43,6 @@ services:
     image: lscr.io/linuxserver/radarr:latest
     container_name: radarr
     user: 1000:1000
-    networks:
-      - jellyfin-net
     volumes:
       - /data/.config/radarr:/config
       - /data:/data
@@ -62,8 +54,6 @@ services:
     image: lscr.io/linuxserver/qbittorrent:latest
     container_name: qbittorrent
     user: 1000:1000
-    networks:
-      - jellyfin-net
     volumes:
       - /data/.config/qbittorrent:/config
       - /data/torrents:/data/torrents
@@ -79,8 +69,6 @@ services:
     image: fallenbagel/jellyseerr:latest
     container_name: jellyseerr
     user: 1000:1000
-    networks:
-      - jellyfin-net
     volumes:
       - /data/.config/jellyseerr:/app/config
     ports:
@@ -93,8 +81,6 @@ services:
     image: lscr.io/linuxserver/bazarr:latest
     container_name: bazarr
     user: 1000:1000
-    networks:
-      - jellyfin-net
     volumes:
       - /data/.config/bazarr:/config
       - /data/media:/movies
@@ -102,7 +88,3 @@ services:
     ports:
       - "6767:6767"
     restart: unless-stopped
-
-networks:
-  jellyfin-net:
-    driver: bridge
