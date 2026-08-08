@@ -252,6 +252,10 @@
     const fireboxPreview = document.querySelector('#firebox-preview');
     const reloadPreview = document.querySelector('.reload-preview');
 
+    fireboxPreview.addEventListener('load', () => {
+      fireboxPreview.focus({ preventScroll: true });
+    });
+
     reloadPreview.addEventListener('click', () => {
       fireboxPreview.src = fireboxPreview.src;
     });
