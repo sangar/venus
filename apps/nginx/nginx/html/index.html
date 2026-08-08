@@ -42,17 +42,20 @@
     a:hover { color: var(--fire); }
 
     .page {
-      width: min(100% - 40px, 1060px);
-      margin: 0 auto;
+      display: grid;
+      grid-template-columns: minmax(290px, 360px) minmax(0, 1fr);
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      padding: 28px;
+      border-right: 1px solid var(--line);
     }
 
     header {
-      display: flex;
-      align-items: baseline;
-      justify-content: space-between;
-      gap: 24px;
-      padding: 28px 0 20px;
-      border-bottom: 1px solid var(--line);
       font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
       font-size: 13px;
       letter-spacing: .04em;
@@ -60,19 +63,17 @@
     }
 
     .mark { font-weight: 800; text-decoration: none; }
-    .location { color: #59635d; }
+    .location { display: block; margin-top: 5px; color: #59635d; }
 
     .intro {
-      max-width: 840px;
-      padding: clamp(52px, 10vw, 120px) 0 clamp(48px, 8vw, 92px);
+      padding: clamp(25px, 4vw, 48px) 0 36px;
     }
 
     h1, h2, p { margin-top: 0; }
 
     h1 {
-      max-width: 760px;
-      margin-bottom: 26px;
-      font-size: clamp(44px, 7.5vw, 86px);
+      margin-bottom: 20px;
+      font-size: clamp(41px, 4.3vw, 62px);
       font-weight: 400;
       letter-spacing: -.065em;
       line-height: .98;
@@ -81,18 +82,14 @@
     h1 em { color: var(--fire); font-style: italic; }
 
     .lede {
-      max-width: 660px;
       margin-bottom: 0;
-      font-size: clamp(23px, 3vw, 32px);
+      font-size: 20px;
       line-height: 1.27;
     }
 
     .profile {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) 230px;
-      gap: 56px;
-      padding: 42px 0 84px;
       border-top: 1px solid var(--line);
+      padding-top: 28px;
     }
 
     h2 {
@@ -103,7 +100,7 @@
       text-transform: uppercase;
     }
 
-    .profile p { max-width: 650px; }
+    .profile p { font-size: 16px; }
 
     .details {
       margin: 0;
@@ -117,14 +114,19 @@
     dt { color: #66716a; }
     dd { margin: 2px 0 0; font-weight: 700; }
 
-    .work { padding-bottom: 96px; }
+    .work {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      padding: 32px 152px;
+    }
 
     .work-heading {
       display: flex;
       align-items: end;
       justify-content: space-between;
       gap: 24px;
-      margin-bottom: 20px;
+      margin-bottom: 14px;
     }
 
     .work-heading h2 { margin: 0; }
@@ -164,7 +166,7 @@
 
     .reload-preview:hover, .reload-preview:focus-visible { border-color: var(--fire); color: var(--fire); }
 
-    iframe { display: block; width: 100%; height: min(70vw, 700px); min-height: 500px; border: 0; background: var(--canvas); }
+    iframe { display: block; width: 100%; aspect-ratio: 3 / 2; border: 0; background: var(--canvas); }
 
     .caption { display: flex; justify-content: space-between; gap: 24px; margin: 22px 0 0; font-size: 16px; }
     .caption p { max-width: 650px; margin: 0; }
@@ -174,46 +176,58 @@
       display: flex;
       justify-content: space-between;
       gap: 24px;
-      padding: 22px 0 32px;
+      margin-top: auto;
+      padding-top: 28px;
       border-top: 1px solid var(--line);
       font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
       font-size: 13px;
     }
 
-    @media (max-width: 640px) {
-      .page { width: min(100% - 28px, 1060px); }
-      header, footer, .caption { align-items: flex-start; flex-direction: column; gap: 9px; }
-      .location { display: none; }
-      .profile { grid-template-columns: 1fr; gap: 28px; padding-bottom: 64px; }
-      .work { padding-bottom: 72px; }
-      iframe { height: 118vw; min-height: 460px; }
+    @media (max-width: 780px) {
+      .page { display: block; }
+      .sidebar { min-height: auto; padding: 28px 22px; border-right: 0; border-bottom: 1px solid var(--line); }
+      .intro { padding: 48px 0 32px; }
+      .profile { padding-bottom: 38px; }
+      .work { min-height: auto; padding: 24px; }
+      footer { margin-top: 36px; }
+    }
+
+    @media (max-width: 440px) {
+      .sidebar, .work { padding-left: 16px; padding-right: 16px; }
+      h1 { font-size: 42px; }
+      .caption { align-items: flex-start; flex-direction: column; gap: 9px; }
     }
   </style>
 </head>
 <body>
   <main class="page">
-    <header>
-      <a class="mark" href="https://cv.sandho.lt/">GS / Gard Sandholt</a>
-      <span class="location">Nesodden, Norway</span>
-    </header>
+    <aside class="sidebar">
+      <header>
+        <a class="mark" href="https://cv.sandho.lt/">GS / Gard Sandholt</a>
+        <span class="location">Nesodden, Norway</span>
+      </header>
 
-    <section class="intro">
-      <h1>I build software people enjoy <em>using.</em></h1>
-      <p class="lede">I am a senior software developer with 14+ years of experience building reliable, useful products - and the creator of <a href="https://firebox.no/">Firebox</a>, a place to make interactive things with JavaScript.</p>
-    </section>
+      <section class="intro">
+        <h1>Gard Sandholt</h1>
+        <p class="lede">Senior software developer with 14+ years of experience, and creator of <a href="https://firebox.no/">Firebox</a>.</p>
+      </section>
 
-    <section class="profile" aria-labelledby="about">
-      <div>
+      <section class="profile" aria-labelledby="about">
         <h2 id="about">About</h2>
-        <p>I care about the whole product: the hard backend problems, the small details that make an interface feel right, and the steady work of making systems dependable as they grow.</p>
-        <p>I currently work as a Senior Software Developer at Make AS. Before that, I spent eight years at Attensi helping scale learning technology used by millions of people.</p>
-      </div>
-      <dl class="details">
-        <div><dt>Works with</dt><dd>Ruby, JavaScript, Rails</dd></div>
-        <div><dt>Enjoys</dt><dd>Games, music, good tools</dd></div>
-        <div><dt>Elsewhere</dt><dd><a href="mailto:gard.sandholt@gmail.com">Email</a> / <a href="https://cv.sandho.lt/">CV</a></dd></div>
-      </dl>
-    </section>
+        <p>I care about the whole product: hard backend problems, small interface details, and systems that stay dependable as they grow.</p>
+        <p>I work at Make AS. Before that, I spent eight years at Attensi helping scale learning technology used by millions of people.</p>
+        <dl class="details">
+          <div><dt>Works with</dt><dd>Ruby, JavaScript, Rails</dd></div>
+          <div><dt>Enjoys</dt><dd>Games, music, good tools</dd></div>
+          <div><dt>Elsewhere</dt><dd><a href="mailto:gard.sandholt@gmail.com">Email</a> / <a href="https://cv.sandho.lt/">CV</a></dd></div>
+        </dl>
+      </section>
+
+      <footer>
+        <span>Gard Sandholt</span>
+        <a href="https://cv.sandho.lt/">Full CV -&gt;</a>
+      </footer>
+    </aside>
 
     <section class="work" aria-labelledby="firebox">
       <div class="work-heading">
@@ -228,15 +242,11 @@
         <iframe id="firebox-preview" title="Live Firebox app preview" src="https://firebox.no/p/c67f234e-25aa-4cd5-89b2-c990383f896e" allow="autoplay" scrolling="no" tabindex="0"></iframe>
       </div>
       <div class="caption">
-        <p>This is a live preview of an app made in Firebox. It is an expressive little programming environment for making playful, interactive projects in the browser.</p>
+        <p>This is a live preview of an app made in Firebox. It is an expressive little programming environment for making playful, interactive projects in the browser. This preview is around ~120 lines of code.</p>
         <a href="https://firebox.no/">Visit Firebox -&gt;</a>
       </div>
     </section>
 
-    <footer>
-      <span>Gard Sandholt</span>
-      <a href="https://cv.sandho.lt/">Full CV -&gt;</a>
-    </footer>
   </main>
   <script>
     const fireboxPreview = document.querySelector('#firebox-preview');
