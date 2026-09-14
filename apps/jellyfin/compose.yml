@@ -83,8 +83,7 @@ services:
     user: 1000:1000
     volumes:
       - /data/.config/bazarr:/config
-      - /data/media:/movies
-      - /data/media:/tv
+      - /data:/data
     ports:
       - "6767:6767"
     restart: unless-stopped
