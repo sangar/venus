@@ -4,12 +4,14 @@ services:
     ports:
       - 80:80
       - 443:443
+      - 8888:8888
     environment:
       - NGINX_STREAM_SERVER=${NGINX_STREAM_SERVER}
     restart: always
     volumes:
       - ./nginx/conf/:/etc/nginx/
       - ${HOME}/.config/venus/nginx/sites-enabled/:/etc/nginx/sites-enabled/:ro
+      - ${HOME}/Public/:/home/pi/Public/:ro
       - ./nginx/html/:/usr/share/nginx/html
       - ./certbot/www:/var/www/certbot/
       - ./certbot/conf/:/etc/nginx/ssl/
