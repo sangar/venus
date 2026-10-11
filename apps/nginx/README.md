@@ -1,3 +1,7 @@
+Site configs are loaded from `~/.config/venus/nginx/sites-enabled/*.conf`. Create the folder before starting, otherwise Docker creates it owned by root:
+```sh
+mkdir -p ~/.config/venus/nginx/sites-enabled
+```
 
 Run without ssl config first and create certificates
 ```sh
